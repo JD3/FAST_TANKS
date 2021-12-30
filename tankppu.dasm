@@ -1,0 +1,142 @@
+;date: Dec 28, 2021
+;file: tankppu.dasm
+;
+;This file is a modification of nesppu.dasm found at http://www.8bitworkshor.com;
+;The original version of the file is available for download at the above website.
+;ReadJoypad0 and ReadJoypad1 have been modified to eliminate press and hold
+;functionality for all buttons except button A which moves the tanks. Both
+;controllers are locked after a tank hit with the exception of the [start]
+;button which resets the field, but does not reset the game score. The [start]
+;button is only enabled for tank0 controller.
+;
+; wait for VSYNC to start
+WaitSync:
+  bit PPU_STATUS
+  bpl WaitSync
+  rts
+
+NextRandom subroutine
+  lsr
+  bcc .NoEor
+  eor #$d4
+.NoEor:
+  rts
+; Get previous random value
+PrevRandom subroutine
+  asl
+  bcc .NoEor
+  eor #$a9
+.NoEor:
+  rts
+
+ReadJoypad0: subroutine
+  LDA #$01
+  STA JOYPAD0	  ; set strobe bit
+  lsr  	        ; now A is 0
+  STA JOYPAD0	  ; clear strobe bit
+  ldx #8		    ; read 8 bits  
+.loop:
+  pha		        ; save A (result)
+  LDA JOYPAD0	  ; load controller state
+  lsr  	        ; bit 0 -> carry
+  pla		        ; restore A (result)
+  rol		        ; carry -> bit 0 of result
+  dex		        ; X = X - 1
+  bne .loop	    ; repeat if X is 0
+  LDX TANK_HIT
+  CPX #$01
+  BEQ .START_ONLY
+  TAX
+  TAY
+  CPX #$09
+  BCS .SECOND_TEST
+  JMP .DIRECTIONAL_KEYS
+.SECOND_TEST
+  CPX #$40
+  BNE .NO_MATCH
+.DIRECTIONAL_KEYS:
+  LDX LAST_BUTTON0
+  CPX #0
+  BNE .GET_PRESENT_BUTTON
+  STA LAST_BUTTON0
+  RTS
+.GET_PRESENT_BUTTON:  
+  AND LAST_BUTTON0
+  BEQ .NO_MATCH
+  STA LAST_BUTTON0
+  LDA #$00
+  RTS
+.START_ONLY:
+  CMP #$10
+  BEQ .RESET_PLAY
+  LDA #$00
+  RTS
+.RESET_PLAY:
+  LDA #$00
+  STA TANK_HIT
+  JSR INIT_PLAY
+  JSR LOAD_SPRITES
+  JSR DRAWSPRITES
+  JSR RELOAD0
+  JSR RELOAD1
+  TYA
+  RTS
+.NO_MATCH:
+  LDX #$00
+  STX LAST_BUTTON0
+  TYA
+  RTS
+
+ReadJoypad1: subroutine
+  LDA #$01
+  STA JOYPAD1	; set strobe bit
+  lsr  	; now A is 0
+  STA JOYPAD1	; clear strobe bit
+  ldx #8		; read 8 bits  
+.loop:
+  pha		; save A (result)
+  LDA JOYPAD1	; load controller state
+  lsr  	; bit 0 -> carry
+  pla		; restore A (result)
+  rol		; carry -> bit 0 of result
+  dex		; X = X - 1
+  bne .loop	; repeat if X is 0
+  LDX TANK_HIT
+  CPX #$01
+  BEQ .START_ONLY
+  TAX
+  TAY
+  CPX #$09
+  BCS .SECOND_TEST
+  JMP .DIRECTIONAL_KEYS
+.SECOND_TEST
+  CPX #$40
+  BNE .NO_MATCH
+.DIRECTIONAL_KEYS:
+  LDX LAST_BUTTON1
+  CPX #0
+  BNE .GET_PRESENT_BUTTON
+  STA LAST_BUTTON1
+  RTS
+.GET_PRESENT_BUTTON:  
+  AND LAST_BUTTON1
+  BEQ .NO_MATCH
+  STA LAST_BUTTON1
+  LDA #$00
+  RTS
+.START_ONLY:
+  LDA #$00
+  RTS
+.RESET_PLAY:
+  LDA #$00
+  STA TANK_HIT
+  JSR INIT_PLAY
+  JSR DRAWSPRITES
+  JSR RELOAD0
+  JSR RELOAD1
+  RTS
+.NO_MATCH:
+  LDX #$00
+  STX LAST_BUTTON1
+  TYA
+  RTS

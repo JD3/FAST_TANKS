@@ -1,0 +1,57 @@
+init_apu: subroutine
+  ; Init $4000-4013
+  ldy #$13
+loop:
+  lda regs,y
+  sta $4000,y
+  dey
+  bpl loop
+ 
+  ; We have to skip over $4014 (OAMDMA)
+  lda #$0f
+  sta $4015
+  lda #$40
+  sta $4017   
+  rts
+
+play_square_wave: subroutine
+  jsr init_apu
+  lda #<279
+  sta $4002
+  lda #>279
+  sta $4003
+  lda #%10111111
+  sta $4000
+  rts
+
+play_triangle_wave: subroutine
+  jsr init_apu
+  lda #<139
+  sta $400A
+  lda #>139
+  sta $400B
+  lda #%11000000
+  sta $4008
+  sta $4017
+  rts
+
+GUN_NOISE: subroutine
+  jsr init_apu
+  lda #$8D
+  sta $400E
+  lda #%00111111
+  sta $400C
+  sta $400F
+  rts
+
+SILENCE_NOISE: subroutine
+  lda #$00
+  sta $4015
+  rts
+
+regs:
+  .byte $30,$08,$00,$00
+  .byte $30,$08,$00,$00
+  .byte $80,$00,$00,$00
+  .byte $30,$00,$00,$00
+  .byte $00,$00,$00,$00

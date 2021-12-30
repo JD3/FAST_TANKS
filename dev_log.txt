@@ -1,0 +1,180 @@
+Dec 30, 2021
+
+TANK73.zip
+70.) Fixed another barrier bug. Calibrated balls so
+both fire at the same speed. Black tank ball was faster
+for some reason.
+69.) Doubled the speed of tanks. Fixed the barrier bug that
+Sarah uncovered where she could drive over the last barrrier.
+B0h -> A5h.
+68.) Disabled both controls after a tank hit except for [start]
+button which resets play but keeps the score. I think I might
+have fixed the scoring bug where the red tank gets double
+scores. I added logic to prevent a score if the other tank
+has alread scored. I couldn't reproduce so who knows.
+Sped up the ball.
+67.)
+Subroutines, loops and variables that end in a "0" belong to
+tank1/ball1/player1 - currently the black tank. This first tank is
+referred to as tank0. Subroutines, loops and variables that
+end in "1" belong to tank2/ball2/player2 - currently the red tank.
+This second tank is referred to as tank1. The bullet is referred to
+as the ball in the code. Same ball0, ball1 logic as for the tanks.
+If the subroutine and/or loop ends in neither a "0" nor "1"
+it is for the game overall. There are exceptions to this rule,
+but they are limited. The processing for tank1 is identical to
+that for tank0. You really only have to read the code for half
+the application (tank0 half) to know what's going on.
+This is not a multi-threaded app, there are limitations.
+One limititation is when both tanks fire simultaneously,
+the second tank burps out the bullet.
+Special thanks to the gang at http://8bitworkshop.com/. I used and
+modified their nesdefs.dasm and nesppu.dasm files. These files were a
+great help. My tank.chr is also a modification of jroatch.chr that
+I downloaded from 8bitworkshop.
+
+66.) Code cleaned up. Comments added.
+65.) Pre-cleanup version. TANK68.7z
+64.) Collision detection for ball1 done.
+63.) Collision detection for ball0 done.
+Scoreboard fix. TANK1_HIT logic added tank
+orientation check.
+62.) Collision detection for both tanks done.
+61.) Collision detection for angles for black tank
+now done for new background.
+60.) Collision detection done for black tank
+new background.
+59.) New background.
+58.) Fixed 2 shooting bugs. Red tank no longer
+hits black tank when shooting in the wrong direction.
+West shooting works again.
+57.) North,South,East,West collision detection 
+done for both tanks.
+56.) East & West done for black tank.
+red tank messed up. Take out red tank code
+and do-over.
+55.) North and South - both tanks.
+54.) All angle shots done 4 black tank.
+53.) NW angle shots complete - black tank.
+52.) Triangle logic took too much time. Sticking
+with the original algorigthms for collision detection
+with the addition of mapping "shoot-through" lines.
+North East angle shots done for black tank.
+51.) Ball0 collision, Triangle T1 done.
+50.) Shooting sound added - both tanks. Ball
+logic worked on for both tanks, EAST, WEST, NORTH
+SOUTH. tank0 now uses X register primarily. tank1
+uses Y register. TANK_HIT needs a re-write.
+49.) Shooting bug fixed. North shot.
+48.) Scoreboard done. First version w/out sound.
+I'll call it ver0.25.
+47.) Collision detection unit tested for both tanks
+and both balls. 2 Minor fixes. Scoreboard next.
+46.) Collision detection written for both tanks and
+both balls. Needs unit testing for all 4 objects.
+No display bug in 45 below fixed. Had to LDA Y1 one
+additional time.
+45.) Processing loop for North ball collisions works
+for second ball. First ball doesn't display at all
+prior to a collision?
+44.) Tank hit logic back in for tank1 (hit to tank2).
+INC and DEC for movement instead of ACCUMULATOR math.
+43.) Collision detection for ball 1 done. Firm up the
+coordinates for collision detection - tanks and balls,
+before doing ball2.
+42.) Collision detection both tanks complete. Collision
+detection for both balls next.
+41.) Collision detection tank1.
+40.) Code clean up b4 tackling collision detection.
+39.) Both tanks now move at twice the speed. Makes things
+more exciting. Collission detection for tank1 is now a do-over.
+Double the speed makes a minimum of two (2) numerical checks
+for each direction necessary.
+38.) All collision detection tank1 complete.
+37.) Angle collision detection done for tank1 - minus 
+North West.
+36.) N,S,E,W collision detection complete for tank1. Need
+to do angle collision detection next. All will have to be
+copied for tank2. Scoreboard after collision detection.
+Sounds???
+35.) More improvements on ball movement. RE: 29.) below,
+each controller is now executing the other's draw_loop code
+when the (other's) ball is in motion. It wasn't much work
+and it works great! This design forces a RTI (Return from
+Interrupt), so it seems to result in the game hanging less,
+if at all.
+34.) Perimeter code for tank 1 done - all directions.
+Re-work of 33.) below. Remaining collision Detection tasks:
+a.) ball: W,N,S for barriers. b.) tank1: N,S,E,W for barriers
+c.) tank2: a.) and b.) above. Start thinking about scoreboard.
+First thoughts are winner decided by 3 hits. Look into refresh
+logic...When do i need one? What determines it?
+33.) All Due East facing collision detection done tank1.
+I'd like to be able to re-use this code for tank2.
+We'll see.
+32.) Background Integration done. Not yet functional.
+Need to write collision detection for the perimeter
+and obstacles.
+31.) Nerdy nights had the prototype code I needed
+to implement draft 1 of a background. Tomorrow, collision
+detection for borders and obstacles. Tanks first. Balls second.
+30.) Cleaned up code. Next, look at the initialization
+project in assembly - 8bitworkshop.com.
+29.) More Controller/Tank 2 ball stopping fixes. NOTE: The
+redirect to DRAW_LOOP0 for tank 2 is working. To redirect
+tank 2 to DRAW_LOOP1 would require a LOT of coding. This
+may bite me later, but as long as it works, I'm sticking to
+this processing.
+28.) Ball stopping for Controller/Tank 2 bug fixed. Ball
+left at top of screen after hit fixed. Installed & configured
+RetroArch NES emulator. I can now test both controllers/tanks
+in the same session. Started obstacle creation on battlefield.
+27.) [start] button functioning as reset after a tank hit
+now works. Implemented for [Controller 0] only.
+26.) Both controllers/tanks fully functional for navigation
+and shooting. Diagonal movement of tanks is shaky.
+ry alternating 1 move at a time rather than both.
+25.) [Controller 0] works while [Controller 1] is present.
+[Controller 1] needs more work.
+24.) Start of 2 controller integration.
+23.) Made all processing [Controller 0] specific. This is the
+advance work to adding [Controller 1]. Switched functinality
+of buttons [a] and [b]. [a] now moves the tank. [b] now shoots.
+Tested a real NES usb controller. Works with fceux NES simulator
+software.
+22.) All tank specific variables indexed as <variable>,0.
+21.) All input blocked with the exception of [start] -> [enter],
+after tank hit.
+20.) All diagonal (45 degree angle) collision detection works.
+19.) NE diagonal shot collision detection works.
+18.) No overshots for any shots, diagonal or 90 degree. Collision
+detection problems for diagonal shots.
+17.) Shoots in all directions. Overshots from at least 1 of 4
+quadrants for diagonal shots. No overshots for 90 degree shots.
+16.) Tank now takes shortest path (turn) to directional keypress.
+Bug: ability to shoot is gone.
+15.) ALL diagonal movement correct. The bug that was preventing
+south facing diagonal moves resulted from: JSR ANGLE_MOVES not
+having a rts after it. This caused program flow to go to:
+DUE_NORTH processing.
+14.) NE - diagnol tank1 and ball movement correct. TANK image
+is not smooth. This is due to the fact that I am drawing
+the tank every other frame.
+13.) Turning and moving are seperate functions now.
+12.) up,down,left,right converted to NORTH, SOUTH, EAST, WEST.
+11.) Ball now displays prior to explosion on all four sides.
+10.) Tank explosion animation - pass 1. Issue: ball display. I need
+the ball to display prior to explosion not after. Currently I can
+make it display after or not at all.
+9.) Fixed bug in UP DOWN collision detection.
+8.) Collision detection ball 1 (sprite 2) to robot (sprite 3).
+7.) Fire button latches closed on key hold down.
+6.) Replaced the controller [A] button hack. Polling other buttons s/b
+easier to implement.
+5.) Ball continues to end of shot when tank is moved in any direction.
+4.) Single sprite tank fires ball the complete length or width of screen.
+3.) Single sprite tank fires sprite ball with no overflow (visual).
+2.) Single sprite tank fires ball (sprite) in correct direction based
+on prior directional keypress.
+1.) Single sprite tank moves and faces in correct direction
+based on keypress.
