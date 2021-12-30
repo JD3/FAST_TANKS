@@ -1,7 +1,7 @@
 ;date: Dec 28, 2021
 ;file: tankppu.dasm
 ;
-;This file is a modification of nesppu.dasm found at http://www.8bitworkshor.com;
+;This file is a modification of nesppu.dasm found at http://www.8bitworkshop.com;
 ;The original version of the file is available for download at the above website.
 ;ReadJoypad0 and ReadJoypad1 have been modified to eliminate press and hold
 ;functionality for all buttons except button A which moves the tanks. Both
