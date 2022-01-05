@@ -1,0 +1,6 @@
+#`.gitattributes` file which reclassifies `.dasm` files as Dasm:
+*.dasm linguist-language=Dasm-8-bit-Assembler
+*.dasm linguist-documentation=Dasm-8-bit-Assembler
+*.dasm linguist-vendored=Dasm-8-bit-Assembler
+*.dasm linguist-generated=Dasm-8-bit-Assembler
+*.dasm linguist-detectable=Dasm-8-bit-Assembler
